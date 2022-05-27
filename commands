@@ -1,0 +1,32 @@
+#creating scripts in current folder. Client/server we can chat (transfer entered text) via netcat
+
+vi client.sh
+nc my2 8080
+
+vi server.sh
+nc -l -p 8080
+
+
+
+sudo docker network create mynet
+
+sudo docker container run --name my1 -t -d -v $(pwd):/home --network="mynet" --hostname "my1" alpine
+sudo docker container run --name my2 -t -d -v $(pwd):/home --network="mynet" --hostname "my2" alpine
+
+#-d - detach (run in background)
+#-t - tty (fix stopping container)
+
+
+
+sudo docker container exec -it my2 /bin/sh
+cd home
+chmod +x server.sh
+./server.sh
+
+
+sudo docker container exec -it my1 /bin/sh
+cd home
+chmod +x client.sh
+./client.sh
+
+
